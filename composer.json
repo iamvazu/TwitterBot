@@ -1,0 +1,10 @@
+{
+    "require": {
+        "jublonet/codebird-php": "^3.1"
+    },
+        "autoload": {
+        "files": [
+            "config/constants.php"
+        ]
+    }
+}
