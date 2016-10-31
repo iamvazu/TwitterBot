@@ -4,7 +4,8 @@
     },
         "autoload": {
         "files": [
-            "config/constants.php"
+            "config/constants.php",
+            "config/functions.php"
         ]
     }
 }
