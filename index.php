@@ -1,10 +1,12 @@
 <?php
 
 use Codebird\Codebird;
+use MonkeyLearn;
 
 require 'vendor/autoload.php';
 
 
+//Codebird setup
 Codebird::setConsumerKey(CONSUMER_KEY, CONSUMER_SECRET);
 
 //Instance of codebird
@@ -25,7 +27,7 @@ if (!isset($mentions[0])) {
 }
 
 	$tweets = [];
-	foreach ($mentions AS $index=>$mention) {
+	foreach ($mentions AS $mention) {
 
 		/* 
 		If there are mentions, then store its ID
@@ -42,5 +44,25 @@ if (!isset($mentions[0])) {
 		}
 	}
 
-	
-	pr($tweets, 1);
+	//To send to MonkeyLearn, just extract the 'text' only
+	$tweetsText = array_map(function($tweet){ 
+		return $tweet['text'];
+	}, $tweets);
+
+//MonkeyLearn setup
+$ml = new MonkeyLearn\Client(MONKEYLEARN_KEY);
+
+$text_list = ["i love you", "This is some more text"];
+$module_id = 'cl_qkjxv9Ly';
+
+
+$tweetAnalysis = $ml->classifiers->classify($module_id, $tweetsText, true);
+
+//Assign the sentiment classfier results onto a variable
+$tweetAnalysisResults = $tweetAnalysis->result;
+
+
+
+
+
+

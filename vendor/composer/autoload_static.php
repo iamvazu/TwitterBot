@@ -12,6 +12,10 @@ class ComposerStaticInit49ac6aa3eb0755f108a5913cf807ee2b
     );
 
     public static $prefixLengthsPsr4 = array (
+        'M' => 
+        array (
+            'MonkeyLearn\\' => 12,
+        ),
         'C' => 
         array (
             'Composer\\Installers\\' => 20,
@@ -19,6 +23,10 @@ class ComposerStaticInit49ac6aa3eb0755f108a5913cf807ee2b
     );
 
     public static $prefixDirsPsr4 = array (
+        'MonkeyLearn\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/monkeylearn/monkeylearn-php/src',
+        ),
         'Composer\\Installers\\' => 
         array (
             0 => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers',
