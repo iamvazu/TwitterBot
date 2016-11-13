@@ -9,8 +9,7 @@ A Twitter bot which demostrates the use of sentiment analysis
 
 
 ## Code Example
-
-Coming soon
+- Running the main index.php script will send an emoji to all users who mentioned you
 
 ## Motivation
 
