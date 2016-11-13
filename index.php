@@ -36,13 +36,14 @@ $lastId = $lastId ? 'since_id='.$lastId->twitter_id : '';
 
 $mentions = $cb->statuses_mentionsTimeline($lastId);
 
-
 //If no mentions in Tweet, then return
-
 if (!isset($mentions[0])) {
+	echo 'No tweets added!';
 	return;
 }
 
+
+	//Collect the tweets and store in $tweets/tweetsText array
 	$tweets = [];
 	foreach ($mentions AS $mention) {
 
@@ -66,21 +67,19 @@ if (!isset($mentions[0])) {
 		}, $tweets);
 	}
 
-//MonkeyLearn setup
+//Now with the tweets stored in as an array, let's pass it to MonkeyLearn to classify it
+//[negative, positive, netural]
 $ml = new MonkeyLearn\Client(MONKEYLEARN_KEY);
-
-
 $module_id = 'cl_qkjxv9Ly';
-
 $tweetAnalysis = $ml->classifiers->classify($module_id, $tweetsText, true);
 
 //Assign the sentiment classfier results onto a variable
 $tweetAnalysisResults = $tweetAnalysis->result;
 
+
 //Loop through the mentioned tweets
 //Assign the emoji based on the sentiment category (positive, negative, neutral)
 foreach ($tweets AS $index=>$tweet) {
-	
 
 	switch ($type = $tweetAnalysisResults[$index][0]['label'])
 	{
@@ -97,9 +96,14 @@ foreach ($tweets AS $index=>$tweet) {
 		break;
 	}
 
-	//Tweet the user
+	//Start tweeting the user (using Codebird API)
+	//Add sentitment emoji depending on the tone of the tweet (based on ML API)
+	$cb->statuses_update([
+		'status' => '@'.$tweet['user_screen_name'] . ''.html_entity_decode($emojiSet[rand(0, count($emojiSet)-1)], 0, 'UTF-8'),
+		'in_reply_to_status_id' => $tweet['id']
+		]);
 
-	//Track tweets that we already replied to
+	//Store/track tweets that we already replied to
 	$sql = $db->prepare("INSERT INTO tracking (twitter_id) VALUES (:twitterId)");
 
 	$result = $sql->execute([
@@ -108,6 +112,9 @@ foreach ($tweets AS $index=>$tweet) {
 
 
 }
+
+//Success!
+echo 'tweets added!';
 
 
 
